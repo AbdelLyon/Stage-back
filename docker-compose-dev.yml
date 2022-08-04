@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+    dev_astech_mongo:
+        image: mongo
+        container_name: mongo_astech_dev
+        volumes:
+          - ~/data/db:/data/db
+          - /etc:/etc/mongod.conf
+        restart: always
+        ports:
+          - '29021:27017'
+        networks:
+            - astech-network
+    dev_astech_backend:
+        container_name: backend_astech_dev
+        image: backend_astech-dev:1.0.0
+        build:
+            context: .
+            target: development
+            dockerfile: ./Dockerfile
+        command: npm run start:debug
+        ports:
+            - 3000:3000
+        links:
+          - dev_astech_mongo
+        depends_on:
+          - dev_astech_mongo
+        environment:
+          MONGO_URI: dev_astech_mongo
+          MONGO_DB_NAME: astech
+          TEMP_FOLDER: /home/tmp_dev
+        networks:
+            - astech-network
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
+            - ~/tmp_dev:/home/tmp_dev
+        restart: unless-stopped
+networks:
+    astech-network:
+

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <header><%- include('header') %></header>
+    <section>
+      <p>Bonjour <%= firstname %> <%= lastname %>,</p>
+      <p>
+        Vous venez de vous inscrire sur notre plateforme et nous vous en
+        remercions !
+      </p>
+      <p>Voici vos identifiants :</p>
+      <ul>
+        <li><span>Login : </span> <span><%= email %></span></li>
+        <li><string>Mot de passe :</string> <span><%= password %></span></li>
+      </ul>
+    </section>
+    <footer><%- include('footer') %></footer>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+    prod_astech_mongo:
+        image: mongo
+        container_name: mongo_astech_prod
+        volumes:
+          - ~/data/prod/db:/data/db
+          - /etc/prod:/etc/mongod.conf
+        restart: always
+        ports:
+          - '29022:27017'
+        networks:
+            - astech-network
+
+    prod_astech_backend:
+        container_name: backend_astech_prod
+        image: backend_astech-prod:1.0.1
+        build:
+            context: .
+            target: production
+            dockerfile: ./Dockerfile
+        command: npm run start:prod
+        ports:
+            - 3001:3000
+        links:
+          - prod_astech_mongo
+        depends_on:
+          - prod_astech_mongo
+        environment:
+          MONGO_URI: prod_astech_mongo
+          MONGO_DB_NAME: astech
+          TEMP_FOLDER: /home/tmp_prod
+        networks:
+            - astech-network
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
+            - ~/tmp_prod:/home/tmp_prod
+        restart: unless-stopped
+networks:
+    astech-network:
+

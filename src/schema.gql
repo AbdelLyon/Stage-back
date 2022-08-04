@@ -1,0 +1,66 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+Cette classe représente l'ensemble des informations visibles d'un utilisateur
+"""
+type UserType {
+  id: ID!
+  email: String!
+  role: UserRole!
+  active: Boolean!
+}
+
+enum UserRole {
+  SUPERADMIN
+  ADMIN
+  EMPLOYEE
+  CITIZEN
+}
+
+"""
+Cette classe représente la structure des données retournée une fois un utilisateur s'authentifie.Elle herite de la classe UserType
+"""
+type AuthenticatedUserInfoType {
+  id: ID!
+  email: String!
+  role: UserRole!
+  active: Boolean!
+  token: String!
+}
+
+type Query {
+  getCurrentUser: UserType!
+  requestResetPassword(email: String!): Boolean!
+}
+
+type Mutation {
+  login(input: AuthCredentialsInput!): AuthenticatedUserInfoType!
+  resetPassword(input: ResetPasswordInput!): Boolean!
+  changePassword(input: PasswordInput!): Boolean!
+}
+
+"""
+Cette classe représente les données de l'utilisateur lors de l'authentification
+"""
+input AuthCredentialsInput {
+  email: String!
+  password: String!
+}
+
+"""
+Cette classe représente les données envoyées par l'utilisateur lors qu'il veut modifier son mot de passe lors qu'il à oublié son mot de passe
+"""
+input ResetPasswordInput {
+  token: String!
+  newPassword: String!
+}
+
+"""
+Cette classe représente les données qu'envoi l'utilisateur lors qu'il veut changer son mot de passe
+"""
+input PasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
